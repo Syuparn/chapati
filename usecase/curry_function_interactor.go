@@ -21,7 +21,7 @@ func (p curryFunctionInteractor) Exec(in CurryFunctionInputData) {
 
 	funcSignature := domain.NewFunctionSignature(in.FuncName, params, returnTypes)
 
-	curried, err := p.curryService.Curry(funcSignature)
+	curried, err := p.curryService.Curry(funcSignature, in.CurriedFuncName)
 
 	out := CurryFunctionOutputData{
 		CurriedSignatureList: curried,

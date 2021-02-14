@@ -11,9 +11,10 @@ type CurryFunctionInputPort interface {
 
 // CurryFunctionInputData is a DTO for CurryFunctionInputPort.
 type CurryFunctionInputData struct {
-	FuncName    string
-	Parameters  map[string]string
-	ReturnTypes []string
+	FuncName        string
+	CurriedFuncName string
+	Parameters      map[string]string
+	ReturnTypes     []string
 }
 
 // CurryFunctionOutputPort presents the result of currying function.

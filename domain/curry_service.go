@@ -2,5 +2,5 @@ package domain
 
 // CurryService curries the function signature.
 type CurryService interface {
-	Curry(fn *FunctionSignature) (*CurriedSignatureList, error)
+	Curry(fn *FunctionSignature, name string) (*CurriedSignatureList, error)
 }
