@@ -19,11 +19,12 @@ type CurryFunctionInputData struct {
 
 // CurryFunctionOutputPort presents the result of currying function.
 type CurryFunctionOutputPort interface {
-	Show(out CurryFunctionOutputData)
+	Show(out CurryFunctionOutputData) error
 }
 
 // CurryFunctionOutputData is a DTO for CurryFunctionOutputPort.
 type CurryFunctionOutputData struct {
-	CurriedSignatureList *domain.CurriedSignatureList
-	Error                error
+	OriginalSignatureList *domain.FunctionSignature
+	CurriedSignatureList  *domain.CurriedSignatureList
+	Error                 error
 }
