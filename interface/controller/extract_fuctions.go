@@ -49,7 +49,7 @@ func (e extracter) extractFuncInfo(
 		// TODO: return multiple functions
 		funcType, ok := e.funcTypeOf(info, ident)
 		if ok {
-			return e.inputDataFrom(ident.Name, funcType), nil
+			return e.inputDataFrom(ident.Name, funcType, packageName), nil
 		}
 	}
 
@@ -81,6 +81,7 @@ func (e extracter) funcTypeOf(
 func (e extracter) inputDataFrom(
 	funcName string,
 	t *types.Signature,
+	packageName string,
 ) *usecase.CurryFunctionInputData {
 	params := map[string]string{}
 	returnTypes := make([]string, t.Results().Len())
@@ -100,5 +101,8 @@ func (e extracter) inputDataFrom(
 		CurriedFuncName: curriedFuncPrefix + strings.Title(funcName),
 		Parameters:      params,
 		ReturnTypes:     returnTypes,
+		CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+			PackageName: packageName,
+		},
 	}
 }

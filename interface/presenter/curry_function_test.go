@@ -17,25 +17,22 @@ import (
 
 func TestNewCurryFunctionPresenter(t *testing.T) {
 	tests := []struct {
-		name        string
-		writer      io.Writer
-		packageName string
-		expected    usecase.CurryFunctionOutputPort
+		name     string
+		writer   io.Writer
+		expected usecase.CurryFunctionOutputPort
 	}{
 		{
 			"new presenter",
 			os.Stdout,
-			"myPackage",
 			&curryFunctionPresenter{
-				writer:      os.Stdout,
-				packageName: "myPackage",
+				writer: os.Stdout,
 			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			actual := NewCurryFunctionPresenter(tt.writer, tt.packageName)
+			actual := NewCurryFunctionPresenter(tt.writer)
 
 			if !reflect.DeepEqual(actual, tt.expected) {
 				t.Errorf("wrong value: expected %#v, got %#v", tt.expected, actual)
@@ -109,11 +106,14 @@ func TestCurryFunctionPresenterShow(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
-			p := NewCurryFunctionPresenter(&buf, tt.packageName)
+			p := NewCurryFunctionPresenter(&buf)
 
 			err := p.Show(&usecase.CurryFunctionOutputData{
 				OriginalSignatureList: tt.origSig,
 				CurriedSignatureList:  tt.currySig,
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: tt.packageName,
+				},
 			})
 
 			if err != nil {
@@ -168,7 +168,7 @@ func TestCurryFunctionPresenterShowFailed(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
-			p := NewCurryFunctionPresenter(&buf, tt.packageName)
+			p := NewCurryFunctionPresenter(&buf)
 
 			err := p.Show(tt.out)
 
@@ -544,8 +544,7 @@ func TestCurryFunctionPresenterCurryCode(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p := &curryFunctionPresenter{
-				writer:      os.Stdout,
-				packageName: "myPackage",
+				writer: os.Stdout,
 			}
 			code, err := p.curryCode(tt.currySig, tt.origSig)
 

@@ -17,12 +17,15 @@ func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 		params = append(params, param)
 	}
 
-	returnTypes := make([]domain.Type, 0, len(in.ReturnTypes))
+	returnTypes := make([]domain.Type, len(in.ReturnTypes))
 	for i, t := range in.ReturnTypes {
 		returnTypes[i] = domain.TermType(t)
 	}
 
 	funcSignature := domain.NewFunctionSignature(in.FuncName, params, returnTypes)
+	if funcSignature.Arity() <= 1 {
+		return xerrors.Errorf("no need to curry fn (arity=%d)", funcSignature.Arity())
+	}
 
 	curried, err := p.curryService.Curry(funcSignature, in.CurriedFuncName)
 	if err != nil {
@@ -30,8 +33,9 @@ func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 	}
 
 	out := &CurryFunctionOutputData{
-		OriginalSignatureList: funcSignature,
-		CurriedSignatureList:  curried,
+		OriginalSignatureList:   funcSignature,
+		CurriedSignatureList:    curried,
+		CurriedFunctionMetaData: in.CurriedFunctionMetaData,
 	}
 
 	if err := p.out.Show(out); err != nil {

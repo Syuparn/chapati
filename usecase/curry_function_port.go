@@ -15,6 +15,7 @@ type CurryFunctionInputData struct {
 	CurriedFuncName string
 	Parameters      map[string]string
 	ReturnTypes     []string
+	CurriedFunctionMetaData
 }
 
 // CurryFunctionOutputPort presents the result of currying function.
@@ -26,4 +27,11 @@ type CurryFunctionOutputPort interface {
 type CurryFunctionOutputData struct {
 	OriginalSignatureList *domain.FunctionSignature
 	CurriedSignatureList  *domain.CurriedSignatureList
+	CurriedFunctionMetaData
+}
+
+// CurriedFunctionMetaData is a DTO to render source code.
+type CurriedFunctionMetaData struct {
+	PackageName string
+	//ImportNames
 }

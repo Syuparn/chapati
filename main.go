@@ -3,34 +3,22 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/syuparn/chapati/di"
+	"github.com/syuparn/chapati/interface/controller"
 )
 
 func main() {
-	fileAST, fset, err := ReadFileAST("extract_func.go")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%+v\n", err)
-	}
-
-	funcNodes, err := ExtractFuncAst(fileAST, fset)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%+v\n", err)
-	}
-
-	for _, f := range funcNodes {
-		if f.IsExported() {
-			continue
-		}
-
-		fSpec, err := f.Spec()
-		if err != nil {
+	container := di.NewContainer(os.Stdout)
+	derr := container.Invoke(func(c controller.CurryFunctionController) {
+		if err := c.Handle("example/example.go"); err != nil {
 			fmt.Fprintf(os.Stderr, "%+v\n", err)
+			os.Exit(1)
 		}
+	})
 
-		src, err := GenCurry(fSpec)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%+v\n", err)
-		}
-
-		fmt.Println(src)
+	if derr != nil {
+		fmt.Fprintf(os.Stderr, "di failed: %+v\n", derr)
+		os.Exit(1)
 	}
 }
