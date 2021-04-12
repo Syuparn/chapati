@@ -17,7 +17,7 @@ func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 		params = append(params, param)
 	}
 
-	returnTypes := make([]domain.Type, 0, len(in.ReturnTypes))
+	returnTypes := make([]domain.Type, len(in.ReturnTypes))
 	for i, t := range in.ReturnTypes {
 		returnTypes[i] = domain.TermType(t)
 	}
