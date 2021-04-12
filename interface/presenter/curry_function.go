@@ -28,11 +28,7 @@ func NewCurryFunctionPresenter(
 }
 
 // Show writes source code of curried function to p.writer.
-func (p *curryFunctionPresenter) Show(out usecase.CurryFunctionOutputData) error {
-	if out.Error != nil {
-		return out.Error
-	}
-
+func (p *curryFunctionPresenter) Show(out *usecase.CurryFunctionOutputData) error {
 	f := jen.NewFilePath(p.packageName)
 
 	curryCode, err := p.curryCode(out.CurriedSignatureList, out.OriginalSignatureList)

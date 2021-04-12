@@ -6,7 +6,7 @@ import (
 
 // CurryFunctionInputPort executes currying function.
 type CurryFunctionInputPort interface {
-	Exec(in CurryFunctionInputData)
+	Exec(in *CurryFunctionInputData) error
 }
 
 // CurryFunctionInputData is a DTO for CurryFunctionInputPort.
@@ -19,12 +19,11 @@ type CurryFunctionInputData struct {
 
 // CurryFunctionOutputPort presents the result of currying function.
 type CurryFunctionOutputPort interface {
-	Show(out CurryFunctionOutputData) error
+	Show(out *CurryFunctionOutputData) error
 }
 
 // CurryFunctionOutputData is a DTO for CurryFunctionOutputPort.
 type CurryFunctionOutputData struct {
 	OriginalSignatureList *domain.FunctionSignature
 	CurriedSignatureList  *domain.CurriedSignatureList
-	Error                 error
 }
