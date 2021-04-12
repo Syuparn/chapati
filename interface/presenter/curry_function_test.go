@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/lithammer/dedent"
-	"golang.org/x/xerrors"
 
 	"github.com/syuparn/chapati/domain"
 	"github.com/syuparn/chapati/usecase"
@@ -112,10 +111,9 @@ func TestCurryFunctionPresenterShow(t *testing.T) {
 			var buf bytes.Buffer
 			p := NewCurryFunctionPresenter(&buf, tt.packageName)
 
-			err := p.Show(usecase.CurryFunctionOutputData{
+			err := p.Show(&usecase.CurryFunctionOutputData{
 				OriginalSignatureList: tt.origSig,
 				CurriedSignatureList:  tt.currySig,
-				Error:                 nil,
 			})
 
 			if err != nil {
@@ -136,58 +134,12 @@ func TestCurryFunctionPresenterShowFailed(t *testing.T) {
 	tests := []struct {
 		name        string
 		packageName string
-		out         usecase.CurryFunctionOutputData
+		out         *usecase.CurryFunctionOutputData
 	}{
-		{
-			"outputdata has an error",
-			"mypackage",
-			usecase.CurryFunctionOutputData{
-				OriginalSignatureList: domain.NewFunctionSignature(
-					"myFunc",
-					[]domain.Parameter{
-						domain.NewParameter("arg0", domain.TermType("string")),
-						domain.NewParameter("arg1", domain.TermType("int")),
-					},
-					[]domain.Type{
-						domain.TermType("error"),
-					},
-				),
-				CurriedSignatureList: domain.NewCurriedSignatureList(
-					domain.NewFunctionSignature(
-						"curriedMyFunc",
-						[]domain.Parameter{
-							domain.NewParameter("arg0", domain.TermType("string")),
-						},
-						[]domain.Type{
-							domain.NewFuncType(
-								[]domain.Type{
-									domain.TermType("int"),
-								},
-								[]domain.Type{
-									domain.TermType("error"),
-								},
-							),
-						},
-					),
-					[]*domain.FunctionSignature{
-						domain.NewFunctionSignature(
-							"myFunc1",
-							[]domain.Parameter{
-								domain.NewParameter("arg1", domain.TermType("int")),
-							},
-							[]domain.Type{
-								domain.TermType("error"),
-							},
-						),
-					},
-				),
-				Error: xerrors.Errorf("error"),
-			},
-		},
 		{
 			"curriedSignatureList is not curry func",
 			"mypackage",
-			usecase.CurryFunctionOutputData{
+			&usecase.CurryFunctionOutputData{
 				OriginalSignatureList: domain.NewFunctionSignature(
 					"myFunc",
 					[]domain.Parameter{
@@ -209,7 +161,6 @@ func TestCurryFunctionPresenterShowFailed(t *testing.T) {
 					),
 					[]*domain.FunctionSignature{},
 				),
-				Error: nil,
 			},
 		},
 	}

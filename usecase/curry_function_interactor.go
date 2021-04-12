@@ -1,13 +1,16 @@
 package usecase
 
-import "github.com/syuparn/chapati/domain"
+import (
+	"github.com/syuparn/chapati/domain"
+	"golang.org/x/xerrors"
+)
 
 type curryFunctionInteractor struct {
 	out          CurryFunctionOutputPort
 	curryService domain.CurryService
 }
 
-func (p curryFunctionInteractor) Exec(in CurryFunctionInputData) {
+func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 	params := []domain.Parameter{}
 	for n, t := range in.Parameters {
 		param := domain.NewParameter(n, domain.TermType(t))
@@ -22,14 +25,20 @@ func (p curryFunctionInteractor) Exec(in CurryFunctionInputData) {
 	funcSignature := domain.NewFunctionSignature(in.FuncName, params, returnTypes)
 
 	curried, err := p.curryService.Curry(funcSignature, in.CurriedFuncName)
-
-	out := CurryFunctionOutputData{
-		OriginalSignatureList: funcSignature,
-		CurriedSignatureList:  curried,
-		Error:                 err,
+	if err != nil {
+		return xerrors.Errorf("failed to curry: %w", err)
 	}
 
-	p.out.Show(out)
+	out := &CurryFunctionOutputData{
+		OriginalSignatureList: funcSignature,
+		CurriedSignatureList:  curried,
+	}
+
+	if err := p.out.Show(out); err != nil {
+		return xerrors.Errorf("failed to present outputdata: %w", err)
+	}
+
+	return nil
 }
 
 // NewCurryFunctionInputPort creates a new CurryFunctionInputPort.
