@@ -23,6 +23,9 @@ func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 	}
 
 	funcSignature := domain.NewFunctionSignature(in.FuncName, params, returnTypes)
+	if funcSignature.Arity() <= 1 {
+		return xerrors.Errorf("no need to curry fn (arity=%d)", funcSignature.Arity())
+	}
 
 	curried, err := p.curryService.Curry(funcSignature, in.CurriedFuncName)
 	if err != nil {
