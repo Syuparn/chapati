@@ -33,8 +33,9 @@ func (p curryFunctionInteractor) Exec(in *CurryFunctionInputData) error {
 	}
 
 	out := &CurryFunctionOutputData{
-		OriginalSignatureList: funcSignature,
-		CurriedSignatureList:  curried,
+		OriginalSignatureList:   funcSignature,
+		CurriedSignatureList:    curried,
+		CurriedFunctionMetaData: in.CurriedFunctionMetaData,
 	}
 
 	if err := p.out.Show(out); err != nil {

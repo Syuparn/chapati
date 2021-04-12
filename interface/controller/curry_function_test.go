@@ -54,6 +54,9 @@ func TestCurryFunctionControllerHandle(t *testing.T) {
 				ReturnTypes: []string{
 					"error",
 				},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
+				},
 			},
 		},
 		{
@@ -66,6 +69,9 @@ func TestCurryFunctionControllerHandle(t *testing.T) {
 				ReturnTypes: []string{
 					"int",
 					"bool",
+				},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
 				},
 			},
 		},
@@ -82,6 +88,9 @@ func TestCurryFunctionControllerHandle(t *testing.T) {
 					"funcArg": "func(int) string",
 				},
 				ReturnTypes: []string{},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
+				},
 			},
 		},
 		{
@@ -94,6 +103,9 @@ func TestCurryFunctionControllerHandle(t *testing.T) {
 					"person": "test.Person",
 				},
 				ReturnTypes: []string{},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
+				},
 			},
 		},
 	}

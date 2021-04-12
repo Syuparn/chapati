@@ -12,24 +12,21 @@ import (
 )
 
 type curryFunctionPresenter struct {
-	writer      io.Writer
-	packageName string
+	writer io.Writer
 }
 
 // NewCurryFunctionPresenter creates a new CurryFunctionPresenter.
 func NewCurryFunctionPresenter(
 	writer io.Writer,
-	packageName string,
 ) usecase.CurryFunctionOutputPort {
 	return &curryFunctionPresenter{
-		writer:      writer,
-		packageName: packageName,
+		writer: writer,
 	}
 }
 
 // Show writes source code of curried function to p.writer.
 func (p *curryFunctionPresenter) Show(out *usecase.CurryFunctionOutputData) error {
-	f := jen.NewFilePath(p.packageName)
+	f := jen.NewFilePath(out.CurriedFunctionMetaData.PackageName)
 
 	curryCode, err := p.curryCode(out.CurriedSignatureList, out.OriginalSignatureList)
 	if err != nil {
