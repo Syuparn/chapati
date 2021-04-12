@@ -24,8 +24,9 @@ func (p curryFunctionInteractor) Exec(in CurryFunctionInputData) {
 	curried, err := p.curryService.Curry(funcSignature, in.CurriedFuncName)
 
 	out := CurryFunctionOutputData{
-		CurriedSignatureList: curried,
-		Error:                err,
+		OriginalSignatureList: funcSignature,
+		CurriedSignatureList:  curried,
+		Error:                 err,
 	}
 
 	p.out.Show(out)
