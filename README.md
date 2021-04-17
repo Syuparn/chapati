@@ -1,4 +1,4 @@
-# chapati: the best friend of curry
+# chapati: a good friend of curry
 Code generator for curried function
 
 # Usage
