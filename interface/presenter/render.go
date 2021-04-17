@@ -1,6 +1,8 @@
 package presenter
 
 import (
+	"strings"
+
 	"github.com/dave/jennifer/jen"
 	"github.com/syuparn/chapati/domain"
 )
@@ -44,10 +46,22 @@ func renderTypes(types []domain.Type) []jen.Code {
 }
 
 func renderType(t domain.Type) jen.Code {
-	if !t.IsFuncType() {
-		return jen.Id(string(t.(domain.TermType)))
+	if t.IsFuncType() {
+		return renderFuncType(t)
+	}
+	return renderTermType(t)
+}
+
+func renderTermType(t domain.Type) jen.Code {
+	modulePath, typeName := splitType(t.(domain.TermType))
+	if modulePath == "" {
+		return jen.Id(typeName)
 	}
 
+	return jen.Qual(modulePath, typeName)
+}
+
+func renderFuncType(t domain.Type) jen.Code {
 	fn := jen.Func()
 
 	ft := t.(domain.FuncType)
@@ -61,4 +75,17 @@ func renderType(t domain.Type) jen.Code {
 	}
 
 	return fn
+}
+
+func splitType(t domain.TermType) (modulePath, typeName string) {
+	whole := string(t)
+	iSep := strings.LastIndex(whole, ".")
+
+	if iSep == -1 {
+		modulePath, typeName = "", whole
+		return
+	}
+
+	modulePath, typeName = whole[:iSep], whole[iSep+1:]
+	return
 }
