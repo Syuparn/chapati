@@ -1,4 +1,9 @@
 # chapati: a good friend of curry
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![GoTest](https://github.com/Syuparn/chapati/actions/workflows/test.yaml/badge.svg)](https://github.com/Syuparn/chapati/actions/workflows/test.yaml)
+[![codecov](https://codecov.io/gh/Syuparn/chapati/branch/main/graph/badge.svg?token=GE2B8H4AF7)](https://codecov.io/gh/Syuparn/chapati)
+
+
 Code generator for curried function
 
 # Usage
