@@ -22,7 +22,9 @@ func (e extracter) extractFuncInfo(
 ) (*usecase.CurryFunctionInputData, error) {
 	fset := token.NewFileSet()
 	conf := types.Config{
-		Importer: importer.Default(),
+		// NOTE: use "source" to import directly from source
+		// ("cg" cannot work if dependent package is not installed globally)
+		Importer: importer.ForCompiler(fset, "source", nil),
 	}
 
 	//                                         src, mode

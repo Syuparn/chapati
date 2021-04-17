@@ -108,6 +108,36 @@ func TestCurryFunctionControllerHandle(t *testing.T) {
 				},
 			},
 		},
+		{
+			"imported type",
+			"imported.go",
+			&usecase.CurryFunctionInputData{
+				FuncName:        "write",
+				CurriedFuncName: "CurriedWrite",
+				Parameters: map[string]string{
+					"w": "io.Writer",
+				},
+				ReturnTypes: []string{},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
+				},
+			},
+		},
+		{
+			"imported third-party type",
+			"imported_thirdparty.go",
+			&usecase.CurryFunctionInputData{
+				FuncName:        "handleCode",
+				CurriedFuncName: "CurriedHandleCode",
+				Parameters: map[string]string{
+					"c": "github.com/dave/jennifer/jen.Code",
+				},
+				ReturnTypes: []string{},
+				CurriedFunctionMetaData: usecase.CurriedFunctionMetaData{
+					PackageName: "test",
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {
